@@ -11,48 +11,48 @@ Use the Facade when you want to structure a subsystem into layers.
 */
 
 class SubSystem1 {
-	public:
-		std::string operation1() const {
-			return "Subsystem1: Ready\n";
-		}
-		std::string operationN() const {
-			return "Subsystem1: Go\n";
-		}
+public:
+	std::string operation1() const {
+		return "Subsystem1: Ready\n";
+	}
+	std::string operationN() const {
+		return "Subsystem1: Go\n";
+	}
 };
 
 class SubSystem2 {
-	public:
-		std::string operation1() const {
-			return "Subsystem2: Ready\n";
-		}
-		std::string operationN() const {
-			return "Subsystem2: Go\n";
-		}
+public:
+	std::string operation1() const {
+		return "Subsystem2: Ready\n";
+	}
+	std::string operationN() const {
+		return "Subsystem2: Go\n";
+	}
 };
 
 class Facade {
-	protected:
-		SubSystem1* subsys1;
-		SubSystem2* subsys2;
+protected:
+	SubSystem1* subsys1;
+	SubSystem2* subsys2;
 
-	public:
-		Facade(SubSystem1* s1=nullptr, SubSystem2* s2=nullptr) {
-			subsys1 = s1 ? s1 : new SubSystem1;
-			subsys2 = s2 ? s2 : new SubSystem2; 
-		}
-		~Facade() {
-			delete subsys1;
-			delete subsys2;
-		}
-		std::string operation() const {
-			std::string result = "Facade init\n";
-			result += subsys1->operation1();
-			result += subsys2->operation1();
-			result += "Facade Go\n";
-			result += subsys1->operationN();
-			result += subsys2->operationN();
-			return result;
-		}
+public:
+	Facade(SubSystem1* s1=nullptr, SubSystem2* s2=nullptr) {
+		subsys1 = s1 ? s1 : new SubSystem1;
+		subsys2 = s2 ? s2 : new SubSystem2; 
+	}
+	~Facade() {
+		delete subsys1;
+		delete subsys2;
+	}
+	std::string operation() const {
+		std::string result = "Facade init\n";
+		result += subsys1->operation1();
+		result += subsys2->operation1();
+		result += "Facade Go\n";
+		result += subsys1->operationN();
+		result += subsys2->operationN();
+		return result;
+	}
 };
 
 void app(Facade* facade) {
