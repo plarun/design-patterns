@@ -120,7 +120,9 @@ void app(std::string os) {
 	guiApp->setCheckbox();
 	guiApp->renderButton();
 	guiApp->renderCheckbox();
+
 	delete guiApp;
+	delete factory;
 }
 
 int main() {

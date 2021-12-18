@@ -77,8 +77,8 @@ void app(std::string sys) {
 	button->onClick();
 	button->render();
 
-	delete dialog;
 	delete button;
+	delete dialog;
 }
 
 int main() {
