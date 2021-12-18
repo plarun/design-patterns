@@ -154,16 +154,20 @@ void app() {
 	comp->writeData(data);
 	std::cout << comp->readData() << "\n\n";
 	delete f2;
+	delete comp;
 
 	// Encryption
 	DataSource* enc = new EncryptionDecorator(f3);
 	enc->writeData(data);
 	std::cout << enc->readData() << "\n\n";
 	delete f3;
+	delete enc;
 
 	DataSourceDecorator* full = new EncryptionDecorator(new CompressionDecorator(f4));
 	full->writeData(data);
 	std::cout << full->readData();
+	delete f4;
+	delete full;
 }
 
 int main () {
