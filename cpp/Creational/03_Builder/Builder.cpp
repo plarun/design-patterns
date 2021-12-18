@@ -120,7 +120,7 @@ class Director {
 	}
 };
 
-int main() {
+void app() {
 	Director* director = new Director();
 
 	CarBuilder* carBuilder = new CarBuilder();
@@ -134,4 +134,14 @@ int main() {
 
 	CarManual* manual = manualBuilder->getResult();
 	std::cout << manual->print() << std::endl;
+
+	delete carBuilder;
+	delete car;
+	delete manualBuilder;
+	delete manual;
+	delete director;
+}
+
+int main() {
+	app();
 }
