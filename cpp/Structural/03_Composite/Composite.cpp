@@ -15,54 +15,54 @@ Use the pattern when you want the client code to treat both simple and complex e
 
 // abstract
 class Component {
-	protected:
-		Component* parent;
-	
-	public:
-		virtual ~Component() {}
-		void setParent(Component* newParent) {
-			parent = newParent;
-		}
-		Component* getParent() const {
-			return parent;
-		}
-		virtual void add(Component* component) {}
-		virtual void remove(Component* component) {}
-		virtual bool isComposite() const {
-			return false;
-		}
-		virtual std::string operation() const = 0;
+protected:
+	Component* parent;
+
+public:
+	virtual ~Component() {}
+	void setParent(Component* newParent) {
+		parent = newParent;
+	}
+	Component* getParent() const {
+		return parent;
+	}
+	virtual void add(Component* component) {}
+	virtual void remove(Component* component) {}
+	virtual bool isComposite() const {
+		return false;
+	}
+	virtual std::string operation() const = 0;
 };
 
 class Leaf : public Component {
-	public:
-		std::string operation() const {
-			return "Leaf";
-		}
+public:
+	std::string operation() const {
+		return "Leaf";
+	}
 };
 
 class Composite : public Component {
-	protected:
-		std::list<Component*> children;
+protected:
+	std::list<Component*> children;
 
-	public:
-		void add(Component* component) override {
-			children.push_back(component);
-			component->setParent(this);
-		}
-		void remove(Component* component) override {
-			children.remove(component);
-			component->setParent(nullptr);
-		}
-		bool isComposite() const {
-			return true;
-		}
-		std::string operation() const override {
-			std::string result;
-			for (const Component* comp: children)
-				result += comp == *children.begin() ? comp->operation() : " + " + comp->operation();
-			return "Branch ( " + result + " )";
-		}
+public:
+	void add(Component* component) override {
+		children.push_back(component);
+		component->setParent(this);
+	}
+	void remove(Component* component) override {
+		children.remove(component);
+		component->setParent(nullptr);
+	}
+	bool isComposite() const {
+		return true;
+	}
+	std::string operation() const override {
+		std::string result;
+		for (const Component* comp: children)
+			result += comp == *children.begin() ? comp->operation() : " + " + comp->operation();
+		return "Branch ( " + result + " )";
+	}
 };
 
 void print(Component* component) {
@@ -75,7 +75,7 @@ void link(Component* comp1, Component* comp2) {
 	print(comp1);
 }
 
-int main() {
+void app() {
 	Component* simple = new Leaf;
 	print(simple);
 
@@ -103,4 +103,8 @@ int main() {
 	delete leaf1;
 	delete leaf2;
 	delete leaf3;
+}
+
+int main() {
+	app();
 }
