@@ -16,87 +16,90 @@ Use the Bridge if you need to be able to switch implementations at runtime.
 
 // interface
 class Device {
-	public:
-		virtual bool isEnabled() = 0;
-		virtual void enable() = 0;
-		virtual void disable() = 0;
-		virtual int getVolume() = 0;
-		virtual void setVolume(int percent) = 0;
-		virtual int getChannel() = 0;
-		virtual void setChannel(int channel) = 0;
-		virtual void printStatus() = 0;
+
+public:
+	virtual bool isEnabled() = 0;
+	virtual void enable() = 0;
+	virtual void disable() = 0;
+	virtual int getVolume() = 0;
+	virtual void setVolume(int percent) = 0;
+	virtual int getChannel() = 0;
+	virtual void setChannel(int channel) = 0;
+	virtual void printStatus() = 0;
 };
 
 class Radio : public Device {
-	private:
-		bool on;
-		int volume;
-		int channel;
-	
-	public:
-		Radio() : on(false), volume(10), channel(1) {}
-		bool isEnabled() override {
-			return on;
-		}
-		void enable() override {
-			on = true;
-		}
-		void disable() override {
-			on = false;
-		}
-		int getVolume() override {
-			return volume;
-		}
-		void setVolume(int vol) override {
-			if (vol < 0) volume = 0;
-			else if (vol > 100) volume = 100;
-			else volume = vol;
-		}
-		int getChannel() override {
-			return channel;
-		}
-		void setChannel(int channel_) override {
-			channel = channel_;
-		}
-		void printStatus() override {
-			std::cout << "Radio: " << (on ? "On" : "Off") << ' ' << volume << ' ' << channel << std::endl;
-		}
+
+private:
+	bool on;
+	int volume;
+	int channel;
+
+public:
+	Radio() : on(false), volume(10), channel(1) {}
+	bool isEnabled() override {
+		return on;
+	}
+	void enable() override {
+		on = true;
+	}
+	void disable() override {
+		on = false;
+	}
+	int getVolume() override {
+		return volume;
+	}
+	void setVolume(int vol) override {
+		if (vol < 0) volume = 0;
+		else if (vol > 100) volume = 100;
+		else volume = vol;
+	}
+	int getChannel() override {
+		return channel;
+	}
+	void setChannel(int channel_) override {
+		channel = channel_;
+	}
+	void printStatus() override {
+		std::cout << "Radio: " << (on ? "On" : "Off") << ' ' << volume << ' ' << channel << std::endl;
+	}
 };
 
 class Television : public Device {
-	private:
-		bool on;
-		int volume;
-		int channel;
-	
-	public:
-		Television() : on(false), volume(10), channel(1) {}
-		bool isEnabled() override {
-			return on;
-		}
-		void enable() override {
-			on = true;
-		}
-		void disable() override {
-			on = false;
-		}
-		int getVolume() override {
-			return volume;
-		}
-		void setVolume(int vol) override {
-			if (vol < 0) volume = 0;
-			else if (vol > 100) volume = 100;
-			else volume = vol;
-		}
-		int getChannel() override {
-			return channel;
-		}
-		void setChannel(int channel_) override {
-			channel = channel_;
-		}
-		void printStatus() override {
-			std::cout << "Television: " << (on ? "On" : "Off") << ' ' << volume << ' ' << channel << std::endl;
-		}
+
+private:
+	bool on;
+	int volume;
+	int channel;
+
+public:
+	Television() : on(false), volume(10), channel(1) {}
+	bool isEnabled() override {
+		return on;
+	}
+	void enable() override {
+		on = true;
+	}
+	void disable() override {
+		on = false;
+	}
+	int getVolume() override {
+		return volume;
+	}
+	void setVolume(int vol) override {
+		if (vol < 0) volume = 0;
+		else if (vol > 100) volume = 100;
+		else volume = vol;
+	}
+	int getChannel() override {
+		return channel;
+	}
+	void setChannel(int channel_) override {
+		channel = channel_;
+	}
+	void printStatus() override {
+		std::cout << "Television: " << (on ? "On" : "Off") << ' ' << volume << ' ' << channel << std::endl;
+	}
 };
 
 // interface
@@ -109,36 +112,38 @@ class Remote {
 };
 
 class BasicRemote : public Remote {
-	protected:
-		Device* device;
 	
-	public:
-		BasicRemote() {}
-		BasicRemote(Device* device_) : device(device_) {}
-		void power() override {
-			if (device->isEnabled()) device->disable();
-			else device->enable();
-		}
-		void volumeDown() override {
-			device->setVolume(device->getVolume() - 1);
-		}
-		void volumeUp() override {
-			device->setVolume(device->getVolume() + 1);
-		}
-		void channelDown() override {
-			device->setChannel(device->getChannel() - 1);
-		}
-		void channelUp() override {
-			device->setChannel(device->getChannel() + 1);
-		}
+protected:
+	Device* device;
+
+public:
+	BasicRemote() {}
+	BasicRemote(Device* device_) : device(device_) {}
+	void power() override {
+		if (device->isEnabled()) device->disable();
+		else device->enable();
+	}
+	void volumeDown() override {
+		device->setVolume(device->getVolume() - 1);
+	}
+	void volumeUp() override {
+		device->setVolume(device->getVolume() + 1);
+	}
+	void channelDown() override {
+		device->setChannel(device->getChannel() - 1);
+	}
+	void channelUp() override {
+		device->setChannel(device->getChannel() + 1);
+	}
 };
 
 class AdvancedRemote : public BasicRemote {
-	public:
-		AdvancedRemote(Device* device) : BasicRemote(device) {}
-		void mute() {
-			device->setVolume(0);
-		}
+
+public:
+	AdvancedRemote(Device* device) : BasicRemote(device) {}
+	void mute() {
+		device->setVolume(0);
+	}
 };
 
 void app(Device* device) {
