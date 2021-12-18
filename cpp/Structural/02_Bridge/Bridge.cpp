@@ -29,7 +29,6 @@ public:
 };
 
 class Radio : public Device {
-
 private:
 	bool on;
 	int volume;
@@ -66,7 +65,6 @@ public:
 };
 
 class Television : public Device {
-
 private:
 	bool on;
 	int volume;
@@ -112,7 +110,6 @@ class Remote {
 };
 
 class BasicRemote : public Remote {
-	
 protected:
 	Device* device;
 
@@ -138,7 +135,6 @@ public:
 };
 
 class AdvancedRemote : public BasicRemote {
-
 public:
 	AdvancedRemote(Device* device) : BasicRemote(device) {}
 	void mute() {
