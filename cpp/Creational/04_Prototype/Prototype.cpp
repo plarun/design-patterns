@@ -76,13 +76,17 @@ void app() {
 	std::cout << circle->type() << std::endl;
 	Shape* clonedCircle = circle->clone();
 	std::cout << clonedCircle->type() << std::endl;
+
 	delete circle;
+	delete clonedCircle;
 
 	Shape* square = Client::make(1);
 	std::cout << square->type() << std::endl;
 	Shape* clonedSquare = square->clone();
 	std::cout << clonedSquare->type() << std::endl;
+
 	delete square;
+	delete clonedSquare;
 
 	Client::remove();
 }
