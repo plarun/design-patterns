@@ -11,15 +11,16 @@ Class has only one instance, while providing a global access point to this insta
 */
 
 class Singleton {
-	private:
+	
+private:
 	static Singleton* instance;
 	static std::mutex mux;
 
-	protected:
+protected:
 	std::string value;
 	Singleton(const std::string val): value(val) {}
 
-	public:
+public:
 	// Singleton shouldn't be clonable
 	Singleton(Singleton& other) = delete;
 	// Singleton shouldn't be assignable
