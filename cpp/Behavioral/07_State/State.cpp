@@ -17,69 +17,69 @@ class Context;
 
 // abstract class
 class State {
-	protected:
-		Context* context;
+protected:
+	Context* context;
+
+public:
+	virtual ~State() {}
+
+	void setContext(Context* _context) {
+		context = _context;
+	}
+
+	virtual void handle1() = 0;
 	
-	public:
-		virtual ~State() {}
-
-		void setContext(Context* _context) {
-			context = _context;
-		}
-
-		virtual void handle1() = 0;
-		
-		virtual void handle2() = 0;
+	virtual void handle2() = 0;
 };
 
 class Context {
-	private:
-		State* state;
+private:
+	State* state;
 
-	public:
-		Context(State* _state) : state(nullptr) {
-			transitionTo(_state);
-		}
+public:
+	Context(State* _state) : state(nullptr) {
+		transitionTo(_state);
+	}
 
-		~Context() {
-			delete state;
-		}
+	~Context() {
+		delete state;
+	}
 
-		void transitionTo(State* _state) {
-			std::cout << "Context: Transition to " << typeid(*_state).name() << "\n";
-			if (!state) delete state;
-			state = _state;
-			state->setContext(this);
-		}
+	void transitionTo(State* _state) {
+		std::cout << "Context: Transition to " << typeid(*_state).name() << "\n";
+		if (!state) delete state;
+		state = _state;
+		state->setContext(this);
+	}
 
-		void request1() {
-			state->handle1();
-		}
+	void request1() {
+		state->handle1();
+	}
 
-		void request2() {
-			state->handle2();
-		}
+	void request2() {
+		state->handle2();
+	}
 };
 
 class StateA : public State {
-	public:
-		void handle1() override;
+public:
+	void handle1() override;
 
-		void handle2() override {
-			std::cout << "StageA: handle2: no transition\n";
-		}
+	void handle2() override {
+		std::cout << "StageA: handle2: no transition\n";
+	}
 };
 
 class StateB : public State {
-	public:
-		void handle1() override {
-			std::cout << "StateB: handle1: transition to StateA\n";
-			context->transitionTo(new StateA);
-		}
+public:
+	void handle1() override {
+		std::cout << "StateB: handle1: transition to StateA\n";
+		context->transitionTo(new StateA);
+	}
 
-		void handle2() override {
-			std::cout << "StageB: handle2: no transition\n";
-		}
+	void handle2() override {
+		std::cout << "StageB: handle2: no transition\n";
+	}
 };
 
 void StateA::handle1() {
@@ -88,11 +88,13 @@ void StateA::handle1() {
 }
 
 void app() {
-	Context* context = new Context(new StateA);
+	State* stateA = new StateA;
+	Context* context = new Context(stateA);
 	context->request1();
 	context->request2();
 	
 	delete context;
+	delete stateA;
 }
 
 int main () {

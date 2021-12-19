@@ -64,13 +64,17 @@ public:
 };
 
 void app() {
-	Context* context = new Context(new StrategyA);
+	Strategy* strategyA = new StrategyA;
+	Context* context = new Context(strategyA);
 	
 	context->task();
-	context->setStrategy(new StrategyB);
+	Strategy* strategyB = new StrategyA;
+	context->setStrategy(strategyB);
 	context->task();
 
 	delete context;
+	delete strategyA;
+	delete strategyB;
 }
 
 int main() {
