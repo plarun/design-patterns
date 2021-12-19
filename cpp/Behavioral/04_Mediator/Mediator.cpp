@@ -17,69 +17,69 @@ class BaseComponent;
 
 // interface
 class Mediator {
-	public:
-		virtual void notify(BaseComponent* sender, const std::string event) const = 0;
+public:
+	virtual void notify(BaseComponent* sender, const std::string event) const = 0;
 };
 
 class BaseComponent {
-	protected:
-		Mediator* mediator;
+protected:
+	Mediator* mediator;
 
-	public:
-		BaseComponent(Mediator* _mediator=nullptr) : mediator(_mediator) {}
+public:
+	BaseComponent(Mediator* _mediator=nullptr) : mediator(_mediator) {}
 
-		void setMediator(Mediator* _mediator) {
-			mediator = _mediator;
-		}
+	void setMediator(Mediator* _mediator) {
+		mediator = _mediator;
+	}
 };
 
 class Component1 : public BaseComponent {
-	public:
-		void taskA() {
-			std::cout << "Component1: taskA\n";
-			mediator->notify(this, "eventA");
-		}
+public:
+	void taskA() {
+		std::cout << "Component1: taskA\n";
+		mediator->notify(this, "eventA");
+	}
 
-		void taskB() {
-			std::cout << "Component1: taskB\n";
-			mediator->notify(this, "eventB");
-		}
+	void taskB() {
+		std::cout << "Component1: taskB\n";
+		mediator->notify(this, "eventB");
+	}
 };
 
 class Component2 : public BaseComponent {
-	public:
-		void taskC() {
-			std::cout << "Component2: taskC\n";
-			mediator->notify(this, "eventC");
-		}
+public:
+	void taskC() {
+		std::cout << "Component2: taskC\n";
+		mediator->notify(this, "eventC");
+	}
 
-		void taskD() {
-			std::cout << "Component2: taskD\n";
-			mediator->notify(this, "eventD");
-		}
+	void taskD() {
+		std::cout << "Component2: taskD\n";
+		mediator->notify(this, "eventD");
+	}
 };
 
 class ConcreteMediator : public Mediator {
-	private:
-		Component1* component1;
-		Component2* component2;
-	
-	public:
-		ConcreteMediator(Component1* _component1, Component2* _component2) : component1(_component1), component2(_component2) {
-			component1->setMediator(this);
-			component2->setMediator(this);
-		}
+private:
+	Component1* component1;
+	Component2* component2;
 
-		void notify(BaseComponent* sender, const std::string event) const override {
-			if (event == "eventA") {
-				component1->taskB();
-				component2->taskC();
-			} else if (event == "eventB") {
-				component2->taskC();
-			} else if (event == "eventC") {
-				component2->taskD();
-			}
+public:
+	ConcreteMediator(Component1* _component1, Component2* _component2) : component1(_component1), component2(_component2) {
+		component1->setMediator(this);
+		component2->setMediator(this);
+	}
+
+	void notify(BaseComponent* sender, const std::string event) const override {
+		if (event == "eventA") {
+			component1->taskB();
+			component2->taskC();
+		} else if (event == "eventB") {
+			component2->taskC();
+		} else if (event == "eventC") {
+			component2->taskD();
 		}
+	}
 };
 
 void app() {
