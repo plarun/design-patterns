@@ -13,62 +13,62 @@ lets you traverse elements of a collection without exposing its underlying repre
 
 template <typename T, typename U>
 class Iterator {
-	private:
-		U* container;
-		typename std::vector<T>::iterator iter;
+private:
+	U* container;
+	typename std::vector<T>::iterator iter;
 
-	public:
-		Iterator(U* _data, bool reverse=false) : iterData(_data) {
-			iter = container->dataList.begin();
-		}
+public:
+	Iterator(U* _data, bool reverse=false) : iterData(_data) {
+		iter = container->dataList.begin();
+	}
 
-		void first() {
-			iter = container->dataList.begin();
-		}
+	void first() {
+		iter = container->dataList.begin();
+	}
 
-		void next() {
-			iter++;
-		}
+	void next() {
+		iter++;
+	}
 
-		bool isDone() {
-			return iter == container->dataList.end();
-		}
+	bool isDone() {
+		return iter == container->dataList.end();
+	}
 
-		typename std::vector<T>::iterator current() {
-			return iter;
-		}
+	typename std::vector<T>::iterator current() {
+		return iter;
+	}
 };
 
 template <class T>
 class Container {
-	private:
-		typename std::vector<T> dataList;
-		friend class Iterator<T, Container>;
+private:
+	typename std::vector<T> dataList;
+	friend class Iterator<T, Container>;
 
-	public:
-		void add(T val) {
-			dataList.push_back(val);
-		}
+public:
+	void add(T val) {
+		dataList.push_back(val);
+	}
 
-		Iterator<T, Container>* createIterator() {
-			return new Iterator<T, Container>(this);
-		}
+	Iterator<T, Container>* createIterator() {
+		return new Iterator<T, Container>(this);
+	}
 };
 
 class Data {
-	private:
-		int data;
-	
-	public:
-		Data(int _data=0) : data(_data) {}
+private:
+	int data;
 
-		void setData(int _data) {
-			data = _data;
-		}
+public:
+	Data(int _data=0) : data(_data) {}
 
-		int getData() {
-			return data;
-		}
+	void setData(int _data) {
+		data = _data;
+	}
+
+	int getData() {
+		return data;
+	}
 };
 
 void app() {

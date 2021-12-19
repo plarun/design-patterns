@@ -15,105 +15,105 @@ Lets you pass requests along a chain of handlers. Upon receiving a request,
 
 // abstract class
 class Middleware {
-	private:
-		Middleware* next;
-	
-	public:
-		Middleware* linkWith(Middleware* nextMiddleware) {
-			next = nextMiddleware;
-			return next;
-		}
+private:
+	Middleware* next;
 
-		virtual bool check(std::string email, std::string password) = 0;
+public:
+	Middleware* linkWith(Middleware* nextMiddleware) {
+		next = nextMiddleware;
+		return next;
+	}
 
-	protected:
-		bool checkNext(std::string email, std::string password) {
-			if (next == nullptr) return true;
-			return next->check(email, password);
-		}
+	virtual bool check(std::string email, std::string password) = 0;
+
+protected:
+	bool checkNext(std::string email, std::string password) {
+		if (next == nullptr) return true;
+		return next->check(email, password);
+	}
 };
 
 class Server {
-	private:
-		std::unordered_map<std::string, std::string> users;
-		Middleware* middleware;
+private:
+	std::unordered_map<std::string, std::string> users;
+	Middleware* middleware;
 
-	public:
-		void setMiddleware(Middleware* _middleware) {
-			middleware = _middleware;
-		}
+public:
+	void setMiddleware(Middleware* _middleware) {
+		middleware = _middleware;
+	}
 
-		bool login(std::string email, std::string password) {
-			if (middleware->check(email, password)) return true;
-			return false;
-		}
+	bool login(std::string email, std::string password) {
+		if (middleware->check(email, password)) return true;
+		return false;
+	}
 
-		void addUser(std::string email, std::string password) {
-			users.insert(std::make_pair(email, password));
-		}
+	void addUser(std::string email, std::string password) {
+		users.insert(std::make_pair(email, password));
+	}
 
-		bool hasEmail(std::string email) {
-			return users.find(email) != users.end();
-		}
+	bool hasEmail(std::string email) {
+		return users.find(email) != users.end();
+	}
 
-		bool isValidPassword(std::string email, std::string password) {
-			return users.at(email) == password;
-		}
+	bool isValidPassword(std::string email, std::string password) {
+		return users.at(email) == password;
+	}
 };
 
 class ThrottlingMiddleware : public Middleware {
-	private:
-		int requestPerMinute;
-		int request;
-		time_t currentTime;
+private:
+	int requestPerMinute;
+	int request;
+	time_t currentTime;
 
-		time_t getCurrentTimeInMilliseconds() {
-			return time(nullptr) * 1000;
-		}
+	time_t getCurrentTimeInMilliseconds() {
+		return time(nullptr) * 1000;
+	}
 
-	public:
-		ThrottlingMiddleware(int reqPerMinute) {
-			requestPerMinute = reqPerMinute;
+public:
+	ThrottlingMiddleware(int reqPerMinute) {
+		requestPerMinute = reqPerMinute;
+		currentTime = getCurrentTimeInMilliseconds();
+	}
+
+	bool check(std::string email, std::string password) {
+		time_t now = getCurrentTimeInMilliseconds();
+		if (now > currentTime + 60000) {
+			request = 0;
 			currentTime = getCurrentTimeInMilliseconds();
 		}
-
-		bool check(std::string email, std::string password) {
-			time_t now = getCurrentTimeInMilliseconds();
-			if (now > currentTime + 60000) {
-				request = 0;
-				currentTime = getCurrentTimeInMilliseconds();
-			}
-			++request;
-			if (request > requestPerMinute) {
-				std::terminate();
-			}
-			return checkNext(email, password);
+		++request;
+		if (request > requestPerMinute) {
+			std::terminate();
 		}
+		return checkNext(email, password);
+	}
 };
 
 class UserExistsMiddleware : public Middleware {
-	private:
-		Server* server;
+private:
+	Server* server;
 
-	public:
-		UserExistsMiddleware(Server* _server): server(_server) {}
+public:
+	UserExistsMiddleware(Server* _server): server(_server) {}
 
-		bool check(std::string email, std::string password) {
-			if (!server->hasEmail(email)) return false;
-			if (!server->isValidPassword(email, password)) return false;
-			return checkNext(email, password);
-		}
+	bool check(std::string email, std::string password) {
+		if (!server->hasEmail(email)) return false;
+		if (!server->isValidPassword(email, password)) return false;
+		return checkNext(email, password);
+	}
 };
 
 class RoleCheckMiddleware : public Middleware {
-	private:
-		const std::string adminId = "admin@domain.com";
+private:
+	const std::string adminId = "admin@domain.com";
 
-	public:
-		bool check(std::string email, std::string password) {
-			if (email == adminId) return true;
-			return checkNext(email, password);
-		}
+public:
+	bool check(std::string email, std::string password) {
+		if (email == adminId) return true;
+		return checkNext(email, password);
+	}
 };
 
 void app(Server* server) {
