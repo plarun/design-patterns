@@ -16,51 +16,51 @@ Use the pattern when your class has a massive conditional operator that switches
 
 // interface
 class Strategy {
-	public:
-		virtual ~Strategy() {}
-		virtual std::string doAlgorithm(const std::vector<std::string>& data) const = 0;
+public:
+	virtual ~Strategy() {}
+	virtual std::string doAlgorithm(const std::vector<std::string>& data) const = 0;
 };
 
 class Context {
-	private:
-		Strategy* strategy;
-	
-	public:
-		Context(Strategy* _strategy=nullptr) : strategy(_strategy) {}
+private:
+	Strategy* strategy;
 
-		~Context() {
-			delete strategy;
-		}
+public:
+	Context(Strategy* _strategy=nullptr) : strategy(_strategy) {}
 
-		void setStrategy(Strategy* _strategy) {
-			delete strategy;
-			strategy = _strategy;
-		}
+	~Context() {
+		delete strategy;
+	}
 
-		void task() const {
-			std::cout << "Context: task: " << strategy->doAlgorithm(std::vector<std::string>{"a","b","c","d","e"}) << "\n";
-		}
+	void setStrategy(Strategy* _strategy) {
+		delete strategy;
+		strategy = _strategy;
+	}
+
+	void task() const {
+		std::cout << "Context: task: " << strategy->doAlgorithm(std::vector<std::string>{"a","b","c","d","e"}) << "\n";
+	}
 };
 
 class StrategyA : public Strategy {
-	public:
-		std::string doAlgorithm(const std::vector<std::string>& data) const override {
-			std::string result;
-			for (std::string word : data) result += word;
-			std::sort(std::begin(result), std::end(result));
-			return result;
-		}
+public:
+	std::string doAlgorithm(const std::vector<std::string>& data) const override {
+		std::string result;
+		for (std::string word : data) result += word;
+		std::sort(std::begin(result), std::end(result));
+		return result;
+	}
 };
 
 class StrategyB : public Strategy {
-	public:
-		std::string doAlgorithm(const std::vector<std::string>& data) const override {
-			std::string result;
-			for (std::string word : data) result += word;
-			std::sort(std::begin(result), std::end(result));
-			std::reverse(std::begin(result), std::end(result));
-			return result;
-		}
+public:
+	std::string doAlgorithm(const std::vector<std::string>& data) const override {
+		std::string result;
+		for (std::string word : data) result += word;
+		std::sort(std::begin(result), std::end(result));
+		std::reverse(std::begin(result), std::end(result));
+		return result;
+	}
 };
 
 void app() {
