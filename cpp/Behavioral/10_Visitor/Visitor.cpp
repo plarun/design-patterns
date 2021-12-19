@@ -17,60 +17,60 @@ class ComponentB;
 
 // interface
 class Visitor {
-	public:
-		virtual void visitComponentA(const ComponentA* element) const = 0;
-		virtual void visitComponentB(const ComponentB* element) const = 0;
+public:
+	virtual void visitComponentA(const ComponentA* element) const = 0;
+	virtual void visitComponentB(const ComponentB* element) const = 0;
 };
 
 // interface
 class Component {
-	public:
-		virtual ~Component() {}
-		virtual void accept(Visitor* visitor) const = 0;
+public:
+	virtual ~Component() {}
+	virtual void accept(Visitor* visitor) const = 0;
 };
 
 class ComponentA : public Component {
-	public:
-		void accept(Visitor* visitor) const override {
-			visitor->visitComponentA(this);
-		}
+public:
+	void accept(Visitor* visitor) const override {
+		visitor->visitComponentA(this);
+	}
 
-		std::string task() const {
-			return "task A";
-		}
+	std::string task() const {
+		return "task A";
+	}
 };
 
 class ComponentB : public Component {
-	public:
-		void accept(Visitor* visitor) const override {
-			visitor->visitComponentB(this);
-		}
+public:
+	void accept(Visitor* visitor) const override {
+		visitor->visitComponentB(this);
+	}
 
-		std::string task() const {
-			return "task B";
-		}
+	std::string task() const {
+		return "task B";
+	}
 };
 
 class Visitor1 : public Visitor {
-	public:
-		void visitComponentA(const ComponentA* element) const override {
-			std::cout << "Visitor1: " << element->task() << '\n';
-		}
+public:
+	void visitComponentA(const ComponentA* element) const override {
+		std::cout << "Visitor1: " << element->task() << '\n';
+	}
 
-		void visitComponentB(const ComponentB* element) const override {
-			std::cout << "Visitor1: " << element->task() << '\n';
-		}
+	void visitComponentB(const ComponentB* element) const override {
+		std::cout << "Visitor1: " << element->task() << '\n';
+	}
 };
 
 class Visitor2 : public Visitor {
-	public:
-		void visitComponentA(const ComponentA* element) const override {
-			std::cout << "Visitor2: " << element->task() << '\n';
-		}
+public:
+	void visitComponentA(const ComponentA* element) const override {
+		std::cout << "Visitor2: " << element->task() << '\n';
+	}
 
-		void visitComponentB(const ComponentB* element) const override {
-			std::cout << "Visitor2: " << element->task() << '\n';
-		}
+	void visitComponentB(const ComponentB* element) const override {
+		std::cout << "Visitor2: " << element->task() << '\n';
+	}
 };
 
 void app(std::array<const Component*, 2> components, Visitor* visitor) {
